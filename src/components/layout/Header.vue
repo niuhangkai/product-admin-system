@@ -1,19 +1,14 @@
 <template>
   <div class="header">
     <div class="header-container">
-      <span>
-        欢迎您：{{username}}
-      </span>
-      <el-image
-      :src="circleUrl"
-      fit="fill">
-      </el-image>
+      <span> 欢迎您：{{ users.name }} </span>
+      <el-image :src="circleUrl" fit="fill"> </el-image>
       <el-dropdown @command="handleLogout">
         <span class="el-dropdown-link">
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item >退出</el-dropdown-item>
+          <el-dropdown-item>退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -21,9 +16,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
-    const {$route: {query: {username, password}}} = this
+    const { $route: { query: { username, password } } } = this
     return {
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       color: '',
@@ -37,6 +33,9 @@ export default {
         path: '/login'
       })
     }
+  },
+  computed: {
+    ...mapGetters(['users'])
   }
 }
 </script>

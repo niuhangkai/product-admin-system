@@ -1,11 +1,9 @@
+import http from './fetch'
 
-import http from './fetch';
+export const register = (params) => http.post('/users', { ...params })
 
-export const getUserInfos = (token) => {
-  return http.fetchGet('/user/info', { token });
-};
+export const login = (params) => http.post('/users/login', { ...params })
 
-// 退出登录
-export const logout = (token) => {
-  return http.fetchPost('/login/logout', { token });
-};
+export const products = (params) => http.get('/product', { ...params })
+
+export const deleteProduct = (params) => http.delete('/product', { ...params })
