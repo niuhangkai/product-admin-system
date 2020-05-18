@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="header-container">
-      <span> 欢迎您：{{ users.name }} </span>
+      <span> 欢迎您：{{ parseJson }} </span>
       <el-image :src="circleUrl" fit="fill"> </el-image>
       <el-dropdown @command="handleLogout">
         <span class="el-dropdown-link">
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     const { $route: { query: { username, password } } } = this
@@ -28,14 +28,19 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['LOGOUT']),
     handleLogout () {
+      this.LOGOUT()
       this.$router.push({
         path: '/login'
       })
     }
   },
   computed: {
-    ...mapGetters(['users'])
+    ...mapGetters(['user']),
+    parseJson () {
+      return this.user.name
+    }
   }
 }
 </script>

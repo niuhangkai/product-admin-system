@@ -5,7 +5,7 @@
       stripe
       style="width: 100%">
       <el-table-column
-        prop="id"
+        prop="_id"
         label="ID"
        >
       </el-table-column>
@@ -23,7 +23,7 @@
         label="电话">
       </el-table-column>
       <el-table-column
-        prop="cerateTime"
+        prop="createdAt"
         label="注册时间">
       </el-table-column>
     </el-table>
@@ -31,40 +31,23 @@
 </template>
 
 <script>
+import { users } from '@/api'
 export default {
   data () {
     return {
-      tableData: [{
-        id: '656a5s6a5s46a4x',
-        name: '李四',
-        email: '516595@qq.com',
-        phone: 18696325636,
-        cerateTime: '2020-05-06'
-      }, {
-        id: '656a5s6a5s46a4x',
-        name: '李四',
-        email: '516595@qq.com',
-        phone: 18696325636,
-        cerateTime: '2020-05-06'
-      }, {
-        id: '656a5s6a5s46a4x',
-        name: '李四',
-        email: '516595@qq.com',
-        phone: 18696325636,
-        cerateTime: '2020-05-06'
-      }, {
-        id: '656a5s6a5s46a4x',
-        name: '李四',
-        email: '516595@qq.com',
-        phone: 18696325636,
-        cerateTime: '2020-05-06'
-      }, {
-        id: '656a5s6a5s46a4x',
-        name: '李四',
-        email: '516595@qq.com',
-        phone: 18696325636,
-        cerateTime: '2020-05-06'
-      }]
+      tableData: []
+    }
+  },
+  created () {
+    this.getUserLists()
+  },
+  methods: {
+    getUserLists () {
+      users().then((res) => {
+        if (res.code === 0) {
+          this.tableData = res.users
+        }
+      })
     }
   }
 }

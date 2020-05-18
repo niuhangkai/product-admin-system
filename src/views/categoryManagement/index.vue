@@ -45,6 +45,11 @@ export default {
         name: '小米手机'
       }]
     }
+  },
+  methods: {
+    handleShow () {
+
+    }
   }
 }
 </script>

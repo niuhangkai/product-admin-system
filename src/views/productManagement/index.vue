@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="$route.path === '/menu/product'">
     <el-input
       v-model="searchInput"
       placeholder="请输入内容"
@@ -7,10 +8,10 @@
       size="small"
     ></el-input>
     <el-button type="primary" size="small" @click="handleSearchClick"
-      >搜索</el-button
-    >
+      >搜索</el-button>
+      <el-button type="primary" size="small" @click="handleAddProduct"
+      >添加商品</el-button>
     <el-table
-      v-if="$route.path === '/menu/product'"
       :data="productsData"
       stripe
       style="width: 100%"
@@ -18,7 +19,7 @@
       <el-table-column prop="name" label="名称"> </el-table-column>
       <el-table-column prop="desc" label="描述"> </el-table-column>
       <el-table-column prop="price" label="价格"> </el-table-column>
-      <el-table-column prop="status" label="状态"> </el-table-column>
+      <el-table-column prop="statusStr" label="状态"> </el-table-column>
       <el-table-column prop="action" label="操作">
         <template slot-scope="scope">
           <el-button
@@ -47,18 +48,20 @@
             type="info"
             @click="handleChange(scope.$index, scope.row)"
           >
-            上架
+          {{scope.row.status | statusText}}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+    </div>
     <router-view v-else></router-view>
   </div>
 </template>
 <script>
 import {
   products,
-  deleteProduct
+  deleteProduct,
+  changeProduct
 } from '@/api'
 export default {
   data () {
@@ -77,46 +80,57 @@ export default {
     this.getProductLists()
   },
   methods: {
+    handleAddProduct () {
+      this.$router.push({
+        path: '/menu/product/create'
+      })
+    },
     getProductLists (name) {
       products({
         name
       }).then(({ code, products }) => {
         if (code === 0) {
-          products.map((v) => v.status === 0 ? v.status = '下架' : v.status = '在售')
           this.productsData = products
         }
       })
     },
-    handleChange () {
-
-    },
-    handleDelete (index, { _id }) {
-      deleteProduct({
-        id: _id,
-        n: 465
+    handleChange (index, row) {
+      changeProduct({
+        status: row.status === 0 ? 1 : 0,
+        id: row._id
       }).then((res) => {
         this.handleSearchClick()
       })
     },
-    handleEdit () {
+    handleDelete (index, { _id }) {
+      deleteProduct({
+        id: _id
+      }).then((res) => {
+        this.handleSearchClick()
+      })
+    },
+    handleEdit (index, {_id}) {
       this.$router.push({
         name: 'edit',
         params: {
-          id: Math.random()
+          id: _id
         }
       })
     },
-    handleShow () {
+    handleShow (index, {_id}) {
       this.$router.push({
         name: 'detail',
         params: {
-          id: Math.random()
+          id: _id
         }
       })
     },
     handleSearchClick () {
       this.getProductLists(this.searchInput)
     }
+  },
+  watch: {
+    '$route': 'handleSearchClick'
   }
 }
 </script>

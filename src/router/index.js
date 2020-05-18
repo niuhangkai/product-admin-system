@@ -10,9 +10,11 @@ import Product from '@/views/productManagement'
 import Login from '@/views/login'
 import ProductDetail from '@/views/productManagement/productDetail'
 import ProductEdit from '@/views/productManagement/productEdit'
-
+import ProductAdd from '@/views/productManagement/ProductAdd'
+import { getToken } from '@/utils/auth'
 Vue.use(Router)
-export default new Router({
+
+const router = new Router({
   mode: 'hash',
   routes: [
     {
@@ -58,6 +60,14 @@ export default new Router({
             meta: {
               title: '商品编辑'
             }
+          },
+          {
+            path: 'create',
+            name: 'create',
+            component: ProductAdd,
+            meta: {
+              title: '添加商品'
+            }
           }]
         },
         {
@@ -80,3 +90,21 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  // this route requires auth, check if logged in
+  // if not, redirect to login page.
+  if (getToken()) {
+    next()
+  } else {
+    if (to.path === '/login') {
+      next()
+    } else {
+      next({
+        path: '/login'
+      })
+    }
+  }
+})
+
+export default router

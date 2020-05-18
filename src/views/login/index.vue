@@ -28,12 +28,12 @@ export default {
         name: username,
         password: password
       }).then((res) => {
-        const { code, user } = res
+        const { code } = res
         if (code === 0) {
+          this.USERS(res)
           $router.push({
             path: '/menu/product'
           })
-          this.USERS(res)
         }
       })
     }

@@ -80,7 +80,7 @@ service.interceptors.response.use(response => {
 export default {
   delete (url, params = {}) {
     return new Promise((resolve, reject) => {
-      service.delete(url, qs.stringify(params)).then(res => {
+      service.delete(url, { params }).then(res => {
         resolve(res.data)
       }).catch(error => {
         reject(error)
@@ -90,7 +90,7 @@ export default {
 
   get (url, params = {}) {
     return new Promise((resolve, reject) => {
-      service.get(url, params).then(res => {
+      service.get(url, { params }).then(res => {
         resolve(res.data)
       }).catch(error => {
         reject(error)
@@ -102,6 +102,16 @@ export default {
     return new Promise((resolve, reject) => {
       // qs.stringify(params)
       service.post(url, qs.stringify(params)).then(res => {
+        resolve(res.data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  patch (url, params = {}) {
+    return new Promise((resolve, reject) => {
+      service.patch(url, qs.stringify(params)).then(res => {
         resolve(res.data)
       }).catch(error => {
         reject(error)
